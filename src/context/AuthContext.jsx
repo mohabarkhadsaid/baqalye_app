@@ -16,20 +16,37 @@ export function AuthProvider({ children }) {
     }, []);
 
     const login = (username, password) => {
-        // Mock login logic
-        if (username === "admin" && password === "admin") {
-            const userData = {
-                username: "admin",
-                role: "admin",
-                name: "Admin User",
-                phone: "+252 61 5000000",
-                email: "admin@baqalye.com"
-            };
-            setUser(userData);
-            localStorage.setItem("baqalye_user", JSON.stringify(userData));
+        const storedUsers = JSON.parse(localStorage.getItem("baqalye_users") || "[]");
+        const foundUser = storedUsers.find(u => u.username === username && u.password === password);
+
+        if (foundUser) {
+            // Don't store password in session
+            const { password, ...safeUser } = foundUser;
+            setUser(safeUser);
+            localStorage.setItem("baqalye_user", JSON.stringify(safeUser));
             return true;
         }
         return false;
+    };
+
+    const register = (userData) => {
+        const storedUsers = JSON.parse(localStorage.getItem("baqalye_users") || "[]");
+
+        // Check if username exists
+        if (storedUsers.some(u => u.username === userData.username)) {
+            return { success: false, message: "Username already exists" };
+        }
+
+        const newUser = { ...userData, role: "admin" }; // Default to admin for now
+        storedUsers.push(newUser);
+        localStorage.setItem("baqalye_users", JSON.stringify(storedUsers));
+
+        // Auto login after register
+        const { password, ...safeUser } = newUser;
+        setUser(safeUser);
+        localStorage.setItem("baqalye_user", JSON.stringify(safeUser));
+
+        return { success: true };
     };
 
     const updateProfile = (updatedData) => {
@@ -44,7 +61,7 @@ export function AuthProvider({ children }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, logout, updateProfile }}>
+        <AuthContext.Provider value={{ user, loading, login, logout, register, updateProfile }}>
             {!loading && children}
         </AuthContext.Provider>
     );

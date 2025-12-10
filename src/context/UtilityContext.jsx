@@ -6,17 +6,13 @@ export function UtilityProvider({ children }) {
     // Mock Data or Local Storage
     const [bills, setBills] = useState(() => {
         const saved = localStorage.getItem("baqalye_bills");
-        return saved ? JSON.parse(saved) : [
-            { id: 101, customerId: 1, customerName: "Ahmed Mohamed", period: "Nov 2025", prevReading: 100, currentReading: 150, usage: 50, rate: 0.5, amount: 25, status: "Paid", date: "2025-11-25" },
-            { id: 102, customerId: 2, customerName: "Fatima Ali", period: "Nov 2025", prevReading: 200, currentReading: 220, usage: 20, rate: 0.5, amount: 10, status: "Unpaid", date: "2025-11-26" },
-        ];
+        return saved ? JSON.parse(saved) : [];
     });
 
     const [payments, setPayments] = useState(() => {
         const saved = localStorage.getItem("baqalye_payments");
-        return saved ? JSON.parse(saved) : [
-            { id: 1, billId: 101, customerName: "Ahmed Mohamed", amount: 25, method: "EVC Plus", date: "2025-11-28" }
-        ];
+        const saved = localStorage.getItem("baqalye_payments");
+        return saved ? JSON.parse(saved) : [];
     });
 
     const [waterRate, setWaterRate] = useState(() => {

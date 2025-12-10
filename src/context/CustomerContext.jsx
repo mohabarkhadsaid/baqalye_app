@@ -3,11 +3,15 @@ import { createContext, useContext, useState } from 'react';
 const CustomerContext = createContext();
 
 export function CustomerProvider({ children }) {
-    const [customers, setCustomers] = useState([
-        { id: 1, name: "Ahmed Mohamed", phone: "+252 61 5000000", houseNumber: "N-101", neighborhood: "Waberi", status: "Active" },
-        { id: 2, name: "Fatima Ali", phone: "+252 61 5000001", houseNumber: "N-102", neighborhood: "Hodan", status: "Active" },
-        { id: 3, name: "Abdi Hassan", phone: "+252 61 5000002", houseNumber: "N-103", neighborhood: "Waberi", status: "Inactive" },
-    ]);
+    const [customers, setCustomers] = useState(() => {
+        const saved = localStorage.getItem("baqalye_customers");
+        return saved ? JSON.parse(saved) : [];
+    });
+
+    // Persist customers
+    useEffect(() => {
+        localStorage.setItem("baqalye_customers", JSON.stringify(customers));
+    }, [customers]);
 
     const addCustomer = (customer) => {
         setCustomers(prev => [...prev, { ...customer, id: Date.now() }]);

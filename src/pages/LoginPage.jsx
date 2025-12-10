@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Button, Input } from "../components/ui/Form";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/Card";
 import { Droplets } from "lucide-react";
@@ -43,7 +43,7 @@ export default function LoginPage() {
                             <Input
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                placeholder="Enter 'admin'"
+                                placeholder="Enter your username"
                             />
                         </div>
                         <div className="space-y-2">
@@ -52,7 +52,7 @@ export default function LoginPage() {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Enter 'admin'"
+                                placeholder="Enter your password"
                             />
                         </div>
 
@@ -60,8 +60,8 @@ export default function LoginPage() {
 
                         <Button type="submit" className="w-full">Sign In</Button>
 
-                        <div className="text-center text-xs text-slate-400 mt-4">
-                            Default credentials: admin / admin
+                        <div className="text-center text-sm text-slate-500 mt-4">
+                            Don't have an account? <Link to="/register" className="text-blue-600 font-semibold hover:underline">Register here</Link>
                         </div>
                     </form>
                 </CardContent>
