@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@layer utilities {
+    @media print {
+
+        /* Hide everything by default */
+        body * {
+            visibility: hidden;
+        }
+
+        /* Show only the modal content and its children */
+        #receipt-content,
+        #receipt-content * {
+            visibility: visible;
+        }
+
+        /* Position the receipt at the top left */
+        #receipt-content {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Hide sidebar and headers specifically */
+        aside,
+        header,
+        nav,
+        button {
+            display: none !important;
+        }
+    }
+}
