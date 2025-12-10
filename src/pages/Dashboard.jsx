@@ -4,8 +4,12 @@ import { useCustomers } from "../context/CustomerContext";
 
 export default function Dashboard() {
     const { customers } = useCustomers();
-    const { getStats } = useUtility();
+    const { getStats, loading } = useUtility();
     const { totalRevenue, outstanding, totalUsage } = getStats();
+
+    if (loading) {
+        return <div className="p-8 text-center text-slate-500">Loading dashboard data...</div>;
+    }
 
     const stats = [
         { name: "Total Customers", value: customers.length, icon: Users, color: "bg-blue-500" },

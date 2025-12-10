@@ -3,12 +3,14 @@ import { Plus, Search, FileText, Printer } from "lucide-react";
 import { useUtility } from "../context/UtilityContext";
 import ReadingForm from "../components/billing/ReadingForm";
 import ReceiptModal from "../components/billing/ReceiptModal";
+import PaymentModal from "../components/billing/PaymentModal";
 import { Button, Input } from "../components/ui/Form";
 import { cn } from "../lib/utils";
 
 export default function BillingPage() {
-    const { bills, recordPayment } = useUtility();
+    const { bills, recordPayment, loading } = useUtility();
     const [selectedBill, setSelectedBill] = useState(null);
+    const [paymentBill, setPaymentBill] = useState(null);
     const [isReadingFormOpen, setIsReadingFormOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -16,11 +18,13 @@ export default function BillingPage() {
         b.customerName.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const handlePay = (billId) => {
-        if (confirm("Mark this bill as PAID via Cash?")) {
-            recordPayment(billId, { method: "Cash" });
-        }
+    const handlePay = (bill) => {
+        setPaymentBill(bill);
     };
+
+    if (loading) {
+        return <div className="p-8 text-center text-slate-500">Loading bills...</div>;
+    }
 
     return (
         <div className="space-y-6">
@@ -77,8 +81,8 @@ export default function BillingPage() {
                                 </td>
                                 <td className="px-6 py-4 text-right">
                                     {bill.status === "Unpaid" && (
-                                        <Button size="sm" onClick={() => handlePay(bill.id)}>
-                                            Mark Paid
+                                        <Button size="sm" onClick={() => handlePay(bill)}>
+                                            Pay Now
                                         </Button>
                                     )}
                                 </td>
@@ -95,6 +99,11 @@ export default function BillingPage() {
             <ReceiptModal
                 bill={selectedBill}
                 onClose={() => setSelectedBill(null)}
+            />
+
+            <PaymentModal
+                bill={paymentBill}
+                onClose={() => setPaymentBill(null)}
             />
         </div>
     );

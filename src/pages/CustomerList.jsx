@@ -6,7 +6,7 @@ import { Button, Input } from "../components/ui/Form";
 import { cn } from "../lib/utils";
 
 export default function CustomerList() {
-    const { customers, deleteCustomer } = useCustomers();
+    const { customers, deleteCustomer, loading } = useCustomers();
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editingCustomer, setEditingCustomer] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
@@ -35,6 +35,10 @@ export default function CustomerList() {
         setIsFormOpen(false);
         setEditingCustomer(null);
     };
+
+    if (loading) {
+        return <div className="p-8 text-center text-slate-500">Loading customers...</div>;
+    }
 
     return (
         <div className="space-y-6">
